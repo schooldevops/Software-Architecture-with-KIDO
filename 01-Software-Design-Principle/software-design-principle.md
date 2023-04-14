@@ -1,6 +1,6 @@
 # Software Design Principle
 
-- 소프트웨어 디자인 원칙은 SOLIC라고 불리며 이는 (SRP, OCP, LSP, ISP, DIP)의 앞글자를 따서 SOLIC라고 부른다. 
+- 소프트웨어 디자인 원칙은 SOLID라고 불리며 이는 (SRP, OCP, LSP, ISP, DIP)의 앞글자를 따서 SOLIC라고 부른다. 
 - 디자인 원칙은 견고하고, 확장성이 있으며, 신뢰성, 유지보수성이 뛰어난 어플리케이션을 구현하기 위한 훌륭한 원칙이다. 
 
 ## SRP(Single Responsibility Principle)
