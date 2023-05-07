@@ -38,7 +38,7 @@
   - 3.4 신뢰성, 오류처리 및 복구 패턴
     - Throttling and Rate Limiting Pattern
     - Retry Pattern
-    - Circuit Pattern
+    - Circuit Breaker Pattern
     - Dead Letter Queue Pattern (DLQ)
   - 3.5 배포 및 프로덕 테스트 패턴
     - Rolling Deploy Pattern
