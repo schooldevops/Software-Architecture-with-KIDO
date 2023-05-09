@@ -1,15 +1,103 @@
 # Software Design Principle
 
-- 소프트웨어 디자인 원칙은 SOLID라고 불리며 이는 (SRP, OCP, LSP, ISP, DIP)의 앞글자를 따서 SOLID라고 부른다. 
+- 소프트웨어 디자인 원칙은 SOLID라고 불리며 Robert C.Martin이 주창한 원칙이다.
+- 이는 (SRP, OCP, LSP, ISP, DIP)의 앞글자를 따서 SOLID라고 부른다. 
 - 디자인 원칙은 견고하고, 확장성이 있으며, 신뢰성, 유지보수성이 뛰어난 어플리케이션을 구현하기 위한 훌륭한 원칙이다. 
 
 ## SRP(Single Responsibility Principle)
 
-- SRP(Single Responsibility Principle)는 소프트웨어 디자인 원칙으로 단일 책임 원칙을 말한다.
+- SRP(Single Responsibility Principle)는 소프트웨어 디자인 원칙으로 단일 책임 원칙으로 해석된다.
 - 클래스나 모듈은 단 하나의 책임만을 가져야 한다는 것을 의미한다. 
 - 모듈의 응집도를 높이고 결합도를 낮추어 유지보수와 확장이 쉬운 구조를 유지할 수 있다.
+- 책임: 
+  - 특정 사용자의 요청을 처리해야하는 책임으로 이해
 
 <br/>
+
+- clean architecture 에서 단일책임 원칙 정의
+  - ```A module should have one, and only one, reason to change.``` 
+    - 모듈은 변경되어야 할 오직 한가지의 변경 사유만 있어야한다.
+  - ```A module should be responsible to one, and only one, user or stakeholder.``` 
+    - 모듈은 사용자 혹은 스테이크홀더(이해관계자)에게만 책임을 져야한다.
+  - ```A module should be responsible to one, and only one, actor.```
+    - 모듈은 오직 하나의 액터에 의해서만 책임을 저야한다. 
+- 응집도라는 용어는 SRP를 포함한다. 즉, 단일 액터만을 책임지기 위해서 서로 응집되어 있어야한다. 
+- 콘웨이의 법칙 생각해보기
+  - 콘웨이는 ```소프트웨어 아키텍처는 조직의 의사소통 구조에 따라 결정된다.``` 라고 했다. 
+  - 조직의 사회적 구조에 따라 소프트웨어 아키텍처가 영향을 받기 때문에, 각 모듈 혹은 서비스는 변경해야할 단 하나의 이유를 가진다. 
+### 단일 책임 원칙을 위배한 예제
+
+- 골프연습장 멤버에 대한 아키텍팅을 수행하고자 하는 경우를 가정해보자.
+
+```java
+class Member {
+  String name;
+  Integer age;
+  String joinDate;
+
+  String getName() {...}
+  Integer getAge() {...}
+  ...
+  
+  Integer getUseBallCount() {...}
+  List<Score> getGameScores() {...}
+}
+```
+
+- 위 케이스는 회원과 회원의 활동 정보가 동일한 클래스 내에 존재 
+- 회원의 가입정보, 회원의 활동정보가 서로다른 액터의 책임을 공동으로 가지고 있음
+
+<br/>
+
+### 솔루션 
+
+```java
+class Member {
+  String name;
+  Integer age;
+  String joinDate;
+
+  String getName() {...}
+  Integer getAge() {...}
+  ...
+}
+
+class MemberPracticesAnalizer {
+  Member member;
+
+  Integer getUseBallCount() {...}
+  SwingPath getSwingPathLog() {...}
+}
+
+class MemberGameAnalizer {
+  Member member;
+
+  List<Score> getGameScores() {...}
+}
+```
+
+- 위 클래스는 멤버, 연습 분석기, 게임분석기 3개의 클로스로 분리하여 SRP를 준수한다. 
+- Member 클래스는 회원 정보만을 관리한다. 
+- MemberPracticesAnalizer 클래스는 멤버가 수행한 연습 정보를 저장/조회/분석한다. 
+- MemberGameAnalizer 클래스는 멤버가 수행한 게임 기록을 관리한다. 
+- 각각 클래스는 액터의 요청에 따라 책임을 분리하였다. 
+
+<br/>
+
+### 솔루션 2: 통합된 정보를 한번에 관리가 필요한경우
+
+```java
+class MemberFacade {
+  Member getMembeById() {}
+  Integer getUseBallCountByMemberId(Long id) {}
+  SwingPath getSwingPathLogByMemberId(Long id) {}
+  List<Score> getGameScoresByMemberAndGameId(Long id, Long gameNo) {}
+}
+```
+
+- SRP를 지키다 보면 책임으로 분리된 여러 클래스를 조합해서 결과를 반환하거나 액션을 수행해야할 수 있다. 
+- 이 경우 Facade 패턴으로 이러한 문제를 해결하면서도 SRP를 지킬 수 있다. 
+- ```Facade```는 프랑스 어로 ```대문``` 이라는 의미이며 액터에게 내부 구현은 감추고, 수행가능한 인터페이스만 열어주는 기능을 수행한다. 
 
 ### SRP 베스트프랙티스
 
@@ -27,76 +115,18 @@
   - 따라서 SRP를 따르면 테스트 가능한 코드를 작성할 수 있다.
   - 다시 단일 책임원칙을 따르지 않으면 테스트가 쉽게 깨지고, 이를 재작성하기 위한 방법역시 복잡해진다, 그러므로 테스트코드를 통한 단일 책임원칙 접근법도 좋은 방법이다.
 
-### 다이어그램
-
-- SRP에 따라, 각 클래스는 단 하나의 책임만 가져야 한다.
-- SRP를 나타내는 대표적인 다이어그램은 다음과 같다
-
-     +----------------------+
-     |   Customer           |
-     +----------------------+
-              |
-              | orders()
-              |
-     +----------------------+
-     |   Order              |
-     +----------------------+
-              |
-              | calculatesTotalPrice()
-              |
-     +----------------------+
-     |   Payment            |
-     +----------------------+
-
-- 위의 다이어그램에서, Customer 클래스는 주문(order) 기능만을 갖고 있다.
-- Order 클래스는 주문을 처리하고 결제 총액을 계산하는 기능을 가지며, Payment 클래스는 결제를 처리하는 기능을 가지고 있다. 
-- 이러한 구성으로, 클래스 간 책임이 명확하게 분리되어 있다. 
-- 이는 SRP 원칙에 따라, 각 클래스는 하나의 책임만을 갖도록 설계되었다는 것을 보여준다.
-
-### 샘플코드 예시
-
-#### 잘못된 케이스 
-
-```py
-class Person:
-    def __init__(self, name, date_of_birth):
-        self.name = name
-        self.date_of_birth = date_of_birth
-        
-    def calculate_age(self):
-        # calculate age based on date_of_birth
-        pass
-```
-
-- Person 이 나이 계산까지 수행하고 있어 단일 책임 원칙을 위배 
-
-#### 단일책임 케이스
-
-```py
-class Person:
-    def __init__(self, name, date_of_birth):
-        self.name = name
-        self.date_of_birth = date_of_birth
-        
-class AgeCalculator:
-    def calculate_age(self, person):
-        # calculate age based on person's date_of_birth
-        pass
-```
-
-- Person은 사람의 기본정보만 관리
-- AgeCalculator 클래스를 통해서 나이 계산을 수행
-- 각 클래스의 책임을 분리하여 단일 책임 원칙 준수 
-
 ### SRP(Single Responsibility Principle)의 주요 장점
 
 #### 높은 응집성
 
+- 응집도(Cohesion)는 책임 즉 동일한 책임을 수행하는 데이터와 기능을 하나로 묶어주는 것
 - SRP는 클래스와 메소드에 단일 책임을 할당하므로 응집성을 높일 수 있다. 
 - 각 클래스와 메소드가 한 가지 기능만 담당하면 클래스와 메소드 내부의 코드는 연관성이 높아지며, 서로 다른 기능을 가진 코드가 뒤섞이지 않아 코드의 가독성과 유지보수성이 향상된다.
 
 #### 낮은 결합도
 
+- 결합도(Coupling)는 하나의 기능이 여러가지 일을 수행하는 정도를 나타낸다. 
+- 이때 여러가지 일이란 것은 단일책임영역에 속하지 않는 다른 영역의 일역시 여기저기서 수행하여, 특정 코드의 변경에 따른 사이드 이펙트가 높아지는 현상을 야기한다. 
 - SRP는 코드를 책임에 따라 나누기 때문에 클래스와 메소드 간의 결합도가 낮아진다. 
 - 즉, 하나의 클래스나 메소드를 변경할 때 다른 클래스와 메소드에 영향을 미치지 않는다. 
 - 이는 유연한 코드를 작성할 수 있게 한다.
@@ -115,6 +145,7 @@ class AgeCalculator:
 <br/>
 
 - 따라서 SRP를 따르면 코드의 가독성, 유지보수성, 재사용성, 유연성 등이 향상되며, 코드의 결합도와 복잡도를 줄일 수 있다.
+- 이는 클래스 설계 뿐만 아니라, 마이크로 서비스, 서비스 기반 아키텍처 등에서도 SRP는 매우 중요한 설계 원칙이다. 
 
 -------------------------
 
