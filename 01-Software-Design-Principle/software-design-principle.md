@@ -152,8 +152,74 @@ class MemberFacade {
 ## OCP(Open Close Principle)
 
 - OCP(Open-Closed Principle)는 소프트웨어 디자인 원칙 중 하나로 개방-폐쇄 원칙이라고 한다., 
-- 소프트웨어 요소(클래스, 모듈, 함수 등)는 확장에는 열려 있어야 하고 변경에는 닫혀 있어야 한다는 것을 의미한다. 
+- 1988년 Bertrand Meyer이 주창한 원칙이다. 
+- ```A software artifact should be open for extension but closed for modification.``` 
+  - 소프트웨어 요소(클래스, 모듈, 함수 등)는 확장에는 열려 있어야 하고 변경에는 닫혀 있어야 한다는 것을 의미한다. 
+- 확장: 
+  - 어플리케이션의 기능을 추가하는 것
+  - 열린다는 개념: 기능을 추가하여도 기존 시스템에 영향을 주지 않는다. 
+- 변경: 
+  - 존재하는 기능의 변경을 수행하는 것
+  - 닫혀있다는 개념: 변경이 발생하여도 참조하는 기능이나 어플리케이션에 영향을 주게 된다. 가능하면 변경보다는 확장을 하도록 해야한다.
 - 이를 통해 유지보수성과 재사용성을 높일 수 있다.
+- 클래스나 메소드에 적용이 되지만, 소프트웨어 아키텍처 컴포넌트 레벨이나, 서비스 레벨에도 적용된다. 
+
+### OCP 원칙을 위배한 예제
+
+```java
+class Pet{
+  String petType;
+  void speak() {
+    if ("Dog".equals(petType)) {
+      System.out.println("Bark");
+    } else if ("Cat".equals(petType)) {
+      System.out.println("Miou");
+    }
+  }
+}
+```
+
+- Pet 클래스에서 petType에 따라 speak() 함수에서 조건식을 검사하고 있다. 
+- 이경우 새로운 Pet이 추가되면 관련 조건문 전체를 수정해야하며, 누락되거나 이를통해 사이드 이펙이 발생할 가능성이 높아진다. 
+
+### 솔루션 
+
+```java
+interface Pet {
+  void speak();
+}
+
+class Cat implements Pet {
+  void speak() {
+    System.out.println("Miou");
+  }
+}
+
+class Dog implements Pet {
+  void speak() {
+    System.out.println("Bark");
+  }
+}
+
+class SuperDog extends Dog {
+  @Override
+  void speak() {
+    System.out.println("Bark! Bark! Bark! Bark! Bark! Bark! Bark!");
+  }
+}
+
+class GroomingPet {
+  void grooming(List<Pet> pets) {
+    for (Pet pet in pets) {
+      pet.speak();
+    }
+  }
+}
+```
+
+- 위 코드 패턴은 새로운 종류의 Pet이 필요한경우, Pet을 구현한 class를 추가하기만 하면 되므로 확장에 열려있다.
+- grooming에 어떠한 변경도 발생하지 않으며, 사이드 이펙도 발생하지 않는다. 변경에는 닫혀있다. 
+- 특히 SuperDog과 같이 기존 클래스를 상속 받는 경우에도 메소드 오버라이딩을 통해서 확장이 가능하다. 
 
 ### OCP 베스트프랙티스
 
@@ -171,6 +237,21 @@ class MemberFacade {
   - 의존성 주입은 객체간의 의존성을 줄이고 유연한 소프트웨어를 만드는데 중요한 이다. 
   - 의존성 주입을 사용하면, 객체를 생성하는 책임을 클라이언트에서 분리하여 객체 생성에 대한 제어를 바깥에서 할 수 있다. 
   - 이를 통해 새로운 객체를 추가하거나 기존 객체를 수정해도 클라이언트 코드를 변경하지 않아도 되므로 OCP를 구현하기에 좋다.
+
+### OCP의 장점 
+
+- 확장성: 
+  - 새로운 기능이나 요구 사항이 추가되어도 기존 코드를 수정할 필요 없이, 기존 코드를 확장하여 새로운 동작을 추가할 수 있다. 
+  - 이는 코드의 재사용성과 유지 보수성을 높여준다.
+- 안정성: 
+  - 변경으로 인한 파급 효과를 줄일 수 있다. 
+  - 변경에 따른 영향을 최소화하여 시스템의 안정성을 유지할 수 있다.
+- 유연성: 
+  - 기존 코드를 수정하지 않아도 새로운 동작을 추가할 수 있으므로, 시스템의 유연성이 높아진다. 
+  - 새로운 기능이나 요구 사항이 추가될 때, 기존 코드를 수정하지 않아도 되므로 시스템의 대응력이 높아진다.
+- 단순성:
+  - 개방-폐쇄 원칙이 지켜지므로, 코드의 복잡도를 낮출 수 있다. 
+  - 새로운 요구 사항이나 기능이 추가될 때마다 코드를 수정하는 것이 아니므로, 코드의 복잡도가 낮아져 가독성과 이해성이 높아진다.
 
 ## LSP(Liskov Substitution Principle)
 
