@@ -259,6 +259,167 @@ class GroomingPet {
 - 이는 하위 클래스는 상위 클래스의 대체 가능성을 보장해야 한다는 것을 의미한다. 
 - 즉, 상위 클래스의 기능을 하위 클래스에서 모두 수행할 수 있어야 한다는 것이다.
 
+```text
+What is wanted here is something like the following substitution property: If for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2 then S is a subtype of T
+```
+
+- 여기서 원하는 것은 다음 대체 속성을 따르는 것이다. 
+- 만약 타입 S의 o1 객체가 있고, 타입 T의 o2 객체가 있다면, 다음 T를 사용하는 모든 프로그램 P에 대해서, o1이 o2로 대체되고, S가 T의 서브 타입일때 P의 행위는 변경되지 않는다는 것이다.
+
+### LSP를 위배하는 예제
+
+- Rectangle.java 클래스 
+  
+```java
+public class Rectangle {
+    protected double width;
+    protected double height;
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(final double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(final double height) {
+        this.height = height;
+    }
+
+    public double calcArea() {
+        return width * height;
+    }
+}
+```
+
+- 사각형의 속성 (넓이/높이)과 넓이를 구할 수 있는 Rectangle 객체를 생성하였다. 
+
+<br/>
+
+- Square.java 클래스 
+  
+```java
+public class Square extends Rectangle {
+    @Override
+    public void setWidth(final double width) {
+        this.height = width;
+        this.width = width;
+    }
+
+    @Override
+    public void setHeight(final double height) {
+        this.height = height;
+        this.width = height;
+    }
+}
+```
+
+- 정사각형은 넓이와 높이가 같으므로 width/height 를 세팅할때 두 값을 동일하게 맞춰주어 조건을 만족시킨다. 
+- Square(자식)은 Rectangle(부모) 을 상속받아서 사용하므로 Square는 나머지 부모 객체의 모든 메소드를 그대로 대체할 수 있다.
+
+<br/>
+
+- 테스트코드 
+  
+```java
+      {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setHeight(4);
+        rectangle.setWidth(5);
+        assertThat(rectangle.calcArea()).isEqualTo(20);
+      }
+      ...
+      {
+        Rectangle rectangle = new Square(); 
+        rectangle.setHeight(4);
+        rectangle.setWidth(5);
+        assertThat(rectangle.calcArea()).isEqualTo(20);
+      }
+```
+
+- 테스트코드로 확인하기 
+- Rectangle 인스턴스는 정상적으로 ```4 * 5 = 20``` 으로 정상값을 출력하고 있다. 
+- Square 인스턴스는 Square(자식) 의 관점에서는 높이와 넓이가 같으므로 최종값은 25가 되는 것이다. 
+- 그러나 Rectangle 로 치환이 되었을때 우리가 원하는 값은 ```4 * 5 = 20``` 을 원하는 것이므로 LSP를 위반하고 있다. 
+
+### 솔루션
+
+- 위를 해결하기 위해서는 다음과 같이 Area를 계산하는 별도의 클래스를 작성하거나, 상속을 사용하지 않는 방법으로 해결할 수 있다. 
+
+- Polygon.java
+  
+```java
+interface Polygon {
+  double calcArea();
+}
+```
+
+<br/>
+
+- Rectangle.java
+
+```java
+public class Rectangle implements Polygon{
+    protected double width;
+    protected double height;
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(final double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(final double height) {
+        this.height = height;
+    }
+    
+    public double calcArea() {
+        return width * height;
+    }
+}
+```
+
+- Polygon 에서 calcArea() 영역만 구현하고 있다.
+- 이를 통해 직사각형의 넓이에 대한 올바른 결과를 획득할 수 있다. 
+
+<br/>
+
+- Square.java
+  
+```java
+public class Square implements Polyon {
+    protected double width;
+    protected double height;
+
+    ...
+
+    @Override
+    public void setWidth(final double width) {
+        this.height = width;
+        this.width = width;
+    }
+
+    @Override
+    public void setHeight(final double height) {
+        this.height = height;
+        this.width = height;
+    }
+}
+```
+
+- Square는 더이상 Rectangle 의 자식이 아니다. 그러나 Polygon 의 구현체이므로 우리는 Polygon 의 인터페이스를 이용할 수 있고, 원하는 결과를 얻을 수 이다.
+
 ### 베스트프랙티스
 
 - 1. 인터페이스를 사용하기
@@ -274,6 +435,23 @@ class GroomingPet {
   - LSP를 따르기 위해서는 상위 클래스와 하위 클래스 간의 관계를 명확히 이해하고, 대체 가능성을 보장해야 한다. 
   - 이를 검증하기 위해서는 상위 클래스와 하위 클래스의 동작을 테스트하고, 대체 가능성을 보장하는지 확인해야 한다.
 
+### LSP의 장점 
+
+- LSP는 서브타입(subtype)을 사용하여 상위 타입의 객체를 대체할 때 발생하는 문제를 방지하기 위한 원칙이다. 
+- LSP의 장점은 다음과 같습니다.
+
+- 코드 재사용성 향상: 
+  - LSP를 따르면 상위 클래스의 객체를 대체하기 때문에 하위 클래스에서도 동일한 코드를 재사용할 수 있다.
+- 유지보수성 향상: 
+  - LSP를 따르면 하위 클래스에서 상위 클래스의 메서드를 오버라이드할 때, 하위 클래스에서의 변경이 상위 클래스에 영향을 미치지 않도록 할 수 있다. 
+  - 이를 통해 유지보수성을 향상시킬 수 있다.
+- 유연성 향상: 
+  - LSP를 따르면 코드의 유연성을 향상시킬 수 있다. 
+  - 상위 클래스에서 정의한 메서드에 대해 하위 클래스에서 더 많은 기능을 추가할 수 있다.
+- 코드 의존성 감소: 
+  - LSP를 따르면 상위 클래스와 하위 클래스 간의 의존성이 줄어든다. 
+  - 상위 클래스와 하위 클래스는 독립적인 객체이기 때문에 코드 의존성을 최소화할 수 있다. 
+  - 이는 유지보수성을 향상시키고 코드 변경의 영향을 최소화할 수 있도록 한다.
 ## ISP(nterface Segregation Principle)
 
 - ISP(Interface Segregation Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 인터페이스 분리 원칙을 말한다.
