@@ -253,6 +253,8 @@ class GroomingPet {
   - 개방-폐쇄 원칙이 지켜지므로, 코드의 복잡도를 낮출 수 있다. 
   - 새로운 요구 사항이나 기능이 추가될 때마다 코드를 수정하는 것이 아니므로, 코드의 복잡도가 낮아져 가독성과 이해성이 높아진다.
 
+-------------------------
+
 ## LSP(Liskov Substitution Principle)
 
 - LSP(Liskov Substitution Principle)는 소프트웨어 디자인 원칙 중 하나로, 리스코프 치환원칙이라고 한다.
@@ -452,7 +454,9 @@ public class Square implements Polyon {
   - LSP를 따르면 상위 클래스와 하위 클래스 간의 의존성이 줄어든다. 
   - 상위 클래스와 하위 클래스는 독립적인 객체이기 때문에 코드 의존성을 최소화할 수 있다. 
   - 이는 유지보수성을 향상시키고 코드 변경의 영향을 최소화할 수 있도록 한다.
-  
+
+-------------------------
+
 ## ISP(nterface Segregation Principle)
 
 - ISP(Interface Segregation Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 인터페이스 분리 원칙을 말한다.
@@ -584,6 +588,7 @@ public class Square implements Polyon {
   - ISP를 따르면 의존성이 불필요하게 추가되는 것을 방지할 수 있다. 
   - 이는 결합도를 감소시켜 유지보수성, 확장성, 테스트 용이성 등을 향상시킨다.
 
+-------------------------
 
 ## DIP(Dependency Inversion Primciple)
 
@@ -758,6 +763,8 @@ com.schooldevops.solid.sample.ThunderDogToy
 - 테스트 용이성
   - 의존성 주입을 통해 테스트용 객체를 주입하면, 테스트에서 용이하게 객체를 대체할 수 있다.
   - 이렇게 하면 단위 테스트를 쉽게 작성할 수 있으며, 테스트 커버리지를 높일 수 있다.
+
+-------------------------
 
 ## WrapUp
 
