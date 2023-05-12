@@ -733,6 +733,8 @@ com.schooldevops.solid.sample.ThunderDogToy
 
 ![solid_dip](imgs/solid_dip.png)
 
+image_from: Clean Architecture - Robert C.Martin
+
 - 그림을 확인하고 우리가 구현한 구현체와 비교해보자. 
 
 ### 베스트프랙티스
