@@ -452,11 +452,107 @@ public class Square implements Polyon {
   - LSP를 따르면 상위 클래스와 하위 클래스 간의 의존성이 줄어든다. 
   - 상위 클래스와 하위 클래스는 독립적인 객체이기 때문에 코드 의존성을 최소화할 수 있다. 
   - 이는 유지보수성을 향상시키고 코드 변경의 영향을 최소화할 수 있도록 한다.
+  
 ## ISP(nterface Segregation Principle)
 
 - ISP(Interface Segregation Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 인터페이스 분리 원칙을 말한다.
-- 클라이언트가 자신이 사용하지 않는 인터페이스에 의존하지 않아야 한다는 것을 의미한다. 
+- 클라이언트가 자신이 사용하지 않는 기능에 의존하지 않아야 한다는 것을 의미한다. 
 - 즉, 인터페이스를 작은 단위로 쪼개서, 클라이언트가 필요한 인터페이스만 사용할 수 있도록 해야 한다는 것이다.
+
+### ISP 위배 예제
+
+```java
+  interface Device {
+    void print();
+
+    void fax();
+
+    void scan();
+  }
+
+  class AllDevices implements Device {
+    public void print() {
+      System.out.println("Printing with Printer");
+    }
+
+    public void fax() {
+      System.out.println("Sending to Fax XXXXX");
+    }
+
+    public void scan() {
+      System.out.println("Scanning report..");
+    }
+  }
+
+  class OutputDevice implements Device {
+    public void print() {
+      System.out.println("Printing with Printer");
+    }
+
+    public void fax() {
+      System.out.println("Sending to Fax XXXXX");
+    }
+
+    public void scan() {
+      throw new NotSupportDevices("This divice is not supported now.");
+    }
+  }
+```
+
+- 위 코드는 Device라는 인터페이스에 디바이스 관련 모든 기능을 추가하고 있다. 
+- 이 경우 AllDevices 객체는 모든 기능을 구현하고 있다.
+- 반면 OutputDevice 와 같이 구현이 필요 없더라도 인터페이스 구현체는 만들어야하며, 지원하지 않음을 알리는 예외를 처리한다.
+- 클라이언트 어플리케이션 입장에서는 혼란을 유발하며, 꼭 필요한 기능만을 사용하고자 하는경우에도 불필요한 작업을 해야한다.
+- 이 코드는 매우 좋지않은 구조이며, 확장성을 약하게 한다.  
+
+### 솔루션
+
+```java
+  interface DevicePrinter {
+    void print();
+  }
+
+  interface DeviceFax {
+    void fax();
+  }
+
+  interface DeviceScanner {
+    void scan();
+  }
+```
+
+- 위와 같이 인터페이스를 각각 분리작성하고, 필요한 인터페이스 메소드를 정의하였다. 
+
+```java
+  class AllDevices implements DevicePrinter, DeviceFax, DeviceScanner {
+    public void print() {
+      System.out.println("Printing with Printer");
+    }
+
+    public void fax() {
+      System.out.println("Sending to Fax XXXXX");
+    }
+
+    public void scan() {
+      System.out.println("Scanning report..");
+    }
+  }
+
+  class OutputDevice implements DevicePrinter, DeviceFax {
+    public void print() {
+      System.out.println("Printing with Printer");
+    }
+
+    public void fax() {
+      System.out.println("Sending to Fax XXXXX");
+    }
+  }
+
+```
+
+- 위와 같이 각 용도에 따라 필요한 인터페이스만 구현하면 된다. 
+- OutputDevice 의 경우 Printer, Fax만 필요하므로 DevicePrinter, DeviceFax 만 구현하고, DeviceScanner 는 사용하지 않음으로 해서 깔끔하고, 꼭 필요한 기능만을 가질 수 있게 된다. 
+- 클라이언트 입장에서도 scan() 메소드는 OutputDevice에 존재하지 않음으로 혼란역시 없다. 
 
 ### 베스트프랙티스
 
@@ -474,11 +570,165 @@ public class Square implements Polyon {
   - 이 때, 인터페이스에는 필요한 기능만 포함해야 한다. 
   - 즉, 불필요한 기능이나 구현 세부사항 등은 인터페이스에서 제외해야 한다.
 
+### ISP의 장점 
+
+- 인터페이스의 응집도 향상: 
+  - ISP를 따르면 인터페이스가 단일 책임을 갖게 되므로, 인터페이스 내부의 메서드들은 더 강한 관련성을 갖게 된다. 
+  - 인터페이스의 응집도를 향상시켜서 코드의 가독성을 높여주게된다.
+- 유지보수성 향상: 
+  - ISP를 따르면 인터페이스의 변경이 더욱 쉬워진다. 
+  - 인터페이스에 의존하는 클래스들은 자신이 필요로 하는 메서드만 사용하므로, 인터페이스의 수정이 다른 클래스에 미치는 영향이 적어지며, 따라서 코드의 유지보수성이 향상된다.
+- 재사용성 향상: 
+  - ISP를 따르면 인터페이스가 더 작고 단순해지므로, 다른 클래스에서 해당 인터페이스를 더 쉽게 재사용할 수 있다.
+- 결합도 감소: 
+  - ISP를 따르면 의존성이 불필요하게 추가되는 것을 방지할 수 있다. 
+  - 이는 결합도를 감소시켜 유지보수성, 확장성, 테스트 용이성 등을 향상시킨다.
+
+
 ## DIP(Dependency Inversion Primciple)
 
 - DIP(Dependency Inversion Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 의존성 역전 원칙이라고 부른다. 
-- 고수준 모듈이 저수준 모듈에 의존하지 않도록 하고, 추상화에 의존하도록 해야 한다는 것을 의미한다.
+- DIP는 이미 구현된 모듈에 의존하지 않고, 추상화된 모듈을 참조하여 유연성을 확장시키는 원칙이다.
 - 즉, 추상화를 통해 모듈 간의 의존성을 최소화하고, 유연한 소프트웨어를 만들어야 한다는 것이다.
+
+<br/>
+
+- 안정적인 추상화 사용방안:
+  - Don’t refer to volatile concrete classes
+    - 휘발성 구체적인 클래스를 참조하지 마라. 대신 추상 인터페이스를 참조하라. 
+    - 이 규칙은 정적이든 동적으로 입력하든 모든 언어에 적용된다. 
+    - 또한 객체 생성에 심각한 제약을 가하고 일반적으로 추상 팩토리 사용을 강제한다.
+  
+  - Don’t derive from volatile concrete classes:
+    - 휘발성 구체적인 클래스에서 파생하지 마라 이것은 이전 규칙에 따른 결과이지만 특별히 언급해야 한다. 
+    - 정적으로 유형이 지정된 언어에서 상속은 모든 소스 코드 관계 중에서 가장 강력하고 엄격하다.
+    - 따라서 매우 주의해서 사용해야 한다. 동적으로 유형이 지정되는 언어에서 상속은 문제가 덜하지만 여전히 종속성이므로 항상 주의하는 것이 가장 현명한 선택이다.
+
+  - Don’t override concrete functions:
+    - 구체적인 기능을 재정의하지 마라. 구체적인 함수에는 종종 소스 코드 종속성이 필요하다. 
+    - 이러한 함수를 재정의하면 해당 종속성이 제거되는 것이 아니라 상속된다. 
+    - 이러한 종속성을 관리하려면 함수를 추상화하고 여러 구현을 생성해야 한다.
+
+  - Never mention the name of anything concrete and volatile:
+    - 구체적이고 변덕스러운 이름은 절대 언급하지 마라. 이것은 실제로 원칙 자체의 재진술일 뿐이다.
+  
+### DIP 위배 예제
+
+```java
+public class BunnyToy {
+  private String name;
+  private String price;
+  private String special;
+  void turnOn() {}
+}
+
+public class ToyGround {
+  BunnyToy bunny;
+
+  void play() {
+    bunny.turnOn();
+  }
+}
+
+public class ThunderDogToy {
+  private String name;
+  private String price;
+  private String thunderWeapon;
+  void turnOn() {}
+}
+```
+
+- 위 코드는 일반적인 객체지향 어플리케이션 사용 패턴일 것이다. 보기에는 문제가 없어 보인다. 
+- 그러나 위 기능을 변경하여 ToyGround 에서 BunnyToy이외에 새로운 장난감을 플레이 하고자 한다면 많은 수정과 사이드이펙이 생기게 된다. 
+- ThunderDogToy 라는 새로운 객체를 ToyGround에서 사용해야한다면 어떻게 해야할까? 이런경우 DIP를 고민해 볼수 있다. 
+
+### 솔루션 
+
+```java
+interface Toy {
+  void turnOn();
+}
+
+public class BunnyToy implements Toy {
+  private String name;
+  private String price;
+  private String special;
+  void turnOn() {}
+}
+
+
+public class ThunderDogToy implements Toy {
+  private String name;
+  private String price;
+  private String thunderWeapon;
+  void turnOn() {}
+}
+
+public class ToyGround {
+  Toy toy;
+
+  public ToyGround(Toy toy) {
+    this.toy = toy;
+  }
+
+  void play() {
+    toy.turnOn();
+  }
+}
+```
+
+- 일단 위 코드에서 ToyGround는 이제 어떠한 장난감이 추가된다고 하더라도 코드수정 없이 play()메소드를 자유롭게 이요할 수 있다. 
+- 새로운 장난감이 추가된다고 하더라도 Toy 인터페이스만 규격에 맞게 생성하면 된다. 
+- 즉, ToyGround는 구체적 클래스를 참조하지 않고, 추상화된 Toy 인터페이스를 참조하고 있다. 
+
+### Factory를 통해서 DIP를 더욱 잘 사용하기 
+
+- 이제는 위 코드를 바탕으로 Factory 를 만들어 DIP를 더욱 잘 사용해보자. 
+- 즉 생성클래스를 통해서 우리가 작성해야하는 어플리케이션에서 완전히 코드를 분리하여, 동적으로 객체를 주입할 수 있다. 
+
+```java
+interface ToyGroundFactory {
+  ToyGround create();
+}
+
+class ToyGroundFactoryImpl implements ToyGroundFactory {
+
+  ToyGround create() {
+    File file = new File('setting.txt');
+    String toyType = file.readLine();
+
+    Class clazz = Class.forName(toyType);
+    Constructor[] consts = clazz.getDeclaredConstructors()
+
+    Constructor defaultConst = null;
+    for (int i = 0; i < consts.length; i++) {
+	    defaultConst = consts[i];
+	    if (defaultConst.getGenericParameterTypes().length == 0)
+      break;
+    }
+
+    try {
+      Toy toy = defaultConst.newInstance(); // Toy 구현체를 파일에서 읽어서 로드한다. 
+      return new ToyGround(toy);    // ToyGround 객체 인스턴스를 반환한다. 
+    } 
+    // ... 생략
+  }
+}
+```
+
+- setting.txt
+  
+```yml
+com.schooldevops.solid.sample.ThunderDogToy
+```
+
+- 위와 같이 ToyGroundFactory 인터페이스를 구현한 ToyGroundFactoryImpl 객체는 외부 호출시 setting.txt 파일을 읽고 해당 파일에 존재하는 클래스를 동적으로 생성하고 있다. 
+- main 함수에서 ToyGroundFactoryImpl을 통해서 ToyGroun 객체를 생성하고, 내부에서 사용하는 Toy 구현체로 ThunderDogToy 를 주입하고 있다. 
+- 위와 같은 메커니즘은 스프링에서 외부 설정파일에 필요한 빈 정의를 하고, 이를 읽어 실제 빈 객체로 등록하는 과정과 유사하다. 
+
+![solid_dip](imgs/solid_dip.png)
+
+- 그림을 확인하고 우리가 구현한 구현체와 비교해보자. 
 
 ### 베스트프랙티스
 
@@ -495,6 +745,19 @@ public class Square implements Polyon {
 - 5. 의존성 최소화 하기
   - 모듈 간의 의존성을 최소화하고, 유연하고 확장 가능한 소프트웨어를 만들 수 있디. 
   - 유닛 테스트가 용이해지며, 코드의 재사용성과 유지보수성도 향상된다.
+
+### DIP의 장점
+
+- 낮은 모듈간의 결합도 
+  - DIP를 따르면 고수준 모듈은 저수준 모듈에 직접 의존하지 않게된며 대신, 둘 다 추상화에 의존하게 된다. 
+  - 이렇게 하면 모듈 간의 결합도를 낮출 수 있으며, 한 모듈이 변경될 때 다른 모듈에 미치는 영향을 줄일 수 있다.
+- 유연성
+  - 의존성 주입을 통해 런타임에 객체를 교체할 수 있으므로, 코드를 수정하지 않고도 소프트웨어의 동작을 변경할 수 있다.
+- 코드 재사용성
+  - 의존성 주입을 통해 공통 기능을 모듈화하고, 다른 모듈에서 재사용할 수 있도록 만들 수 있게된다.
+- 테스트 용이성
+  - 의존성 주입을 통해 테스트용 객체를 주입하면, 테스트에서 용이하게 객체를 대체할 수 있다.
+  - 이렇게 하면 단위 테스트를 쉽게 작성할 수 있으며, 테스트 커버리지를 높일 수 있다.
 
 ## WrapUp
 
