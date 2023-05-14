@@ -233,6 +233,21 @@ class GroomingPet {
 - grooming에 어떠한 변경도 발생하지 않으며, 사이드 이펙도 발생하지 않는다. 변경에는 닫혀있다. 
 - 특히 SuperDog과 같이 기존 클래스를 상속 받는 경우에도 메소드 오버라이딩을 통해서 확장이 가능하다. 
 
+<br/>
+
+![ocp-01](imgs/ocp-01.png)
+
+- OCP를 적용하지 않고 변경을 수행한 경우 
+- 영향도 범위는 해당 함수를 사용하는 모든 모듈에 영향을 준다. 
+  
+<br/>
+
+![ocp-02](imgs/ocp-02.png)
+
+- OCP 원칙에 따라 변경보다 확장을 고려한 경우 
+- 영향도 범위는 인터페이스와 관련 함수에만 존재한다. 
+
+
 ### OCP 베스트프랙티스
 
 - 1. 추상화를 사용하기
@@ -515,6 +530,10 @@ public class Square implements Polyon {
   }
 ```
 
+<br/>
+
+![isp-01](imgs/isp-01.png)
+
 - 위 코드는 Device라는 인터페이스에 디바이스 관련 모든 기능을 추가하고 있다. 
 - 이 경우 AllDevices 객체는 모든 기능을 구현하고 있다.
 - 반면 OutputDevice 와 같이 구현이 필요 없더라도 인터페이스 구현체는 만들어야하며, 지원하지 않음을 알리는 예외를 처리한다.
@@ -565,6 +584,10 @@ public class Square implements Polyon {
   }
 
 ```
+
+<br/>
+
+![isp-02](imgs/isp-02.png)
 
 - 위와 같이 각 용도에 따라 필요한 인터페이스만 구현하면 된다. 
 - OutputDevice 의 경우 Printer, Fax만 필요하므로 DevicePrinter, DeviceFax 만 구현하고, DeviceScanner 는 사용하지 않음으로 해서 깔끔하고, 꼭 필요한 기능만을 가질 수 있게 된다. 
