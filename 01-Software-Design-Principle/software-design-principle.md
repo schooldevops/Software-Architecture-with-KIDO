@@ -44,6 +44,10 @@ class Member {
 }
 ```
 
+<br/>
+
+![srp-01](imgs/srp-01.png)
+
 - 위 케이스는 회원과 회원의 활동 정보가 동일한 클래스 내에 존재 
 - 회원의 가입정보, 회원의 활동정보가 서로다른 액터의 책임을 공동으로 가지고 있음
 
@@ -76,6 +80,10 @@ class MemberGameAnalizer {
 }
 ```
 
+<br/>
+
+![srp-02](imgs/srp-02.png)
+
 - 위 클래스는 멤버, 연습 분석기, 게임분석기 3개의 클로스로 분리하여 SRP를 준수한다. 
 - Member 클래스는 회원 정보만을 관리한다. 
 - MemberPracticesAnalizer 클래스는 멤버가 수행한 연습 정보를 저장/조회/분석한다. 
@@ -94,6 +102,10 @@ class MemberFacade {
   List<Score> getGameScoresByMemberAndGameId(Long id, Long gameNo) {}
 }
 ```
+
+<br/>
+
+![srp-03](imgs/srp-03.png)
 
 - SRP를 지키다 보면 책임으로 분리된 여러 클래스를 조합해서 결과를 반환하거나 액션을 수행해야할 수 있다. 
 - 이 경우 Facade 패턴으로 이러한 문제를 해결하면서도 SRP를 지킬 수 있다. 
