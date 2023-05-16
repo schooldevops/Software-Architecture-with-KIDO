@@ -1,11 +1,13 @@
 # Software-Architecture-with-KIDO
 
 - 1. 소프트웨어 설계원칙
-  - 1.1 SRP: 단일책임원칙
-  - 1.2 OCP: 개방-폐쇄 원칙
-  - 1.3 LSP: 리스코프 치환원칙
-  - 1.4 ISP: 인터페이스 분리 원칙
-  - 1.5 DIP: 의존성 역전 원칙
+  - 1.1 SRP: [단일책임원칙](/01-Software-Design-Principle/software-design-principle.md#srpsingle-responsibility-principle)
+  - 1.2 OCP: [개방-폐쇄 원칙](/01-Software-Design-Principle/software-design-principle.md#ocpopen-close-principle)
+  - 1.3 LSP: [리스코프 치환원칙](/01-Software-Design-Principle/software-design-principle.md#lspliskov-substitution-principle)
+  - 1.4 ISP: [인터페이스 분리 원칙](/01-Software-Design-Principle/software-design-principle.md#ispinterface-segregation-principle)
+  - 1.5 DIP: [의존성 역전 원칙](/01-Software-Design-Principle/software-design-principle.md#dipdependency-inversion-principle)
+
+<br/>
 
 - 2. Software Architecture
   - 2.1 Monolithic Architecture
