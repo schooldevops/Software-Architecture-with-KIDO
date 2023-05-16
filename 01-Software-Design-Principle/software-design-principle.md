@@ -484,7 +484,7 @@ public class Square implements Polyon {
 
 -------------------------
 
-## ISP(nterface Segregation Principle)
+## ISP(Interface Segregation Principle)
 
 - ISP(Interface Segregation Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 인터페이스 분리 원칙을 말한다.
 - 클라이언트가 자신이 사용하지 않는 기능에 의존하지 않아야 한다는 것을 의미한다. 
@@ -625,7 +625,7 @@ public class Square implements Polyon {
 
 -------------------------
 
-## DIP(Dependency Inversion Primciple)
+## DIP(Dependency Inversion Principle)
 
 - DIP(Dependency Inversion Principle) 원칙은 소프트웨어 디자인 원칙 중 하나로, 의존성 역전 원칙이라고 부른다. 
 - DIP는 이미 구현된 모듈에 의존하지 않고, 추상화된 모듈을 참조하여 유연성을 확장시키는 원칙이다.
