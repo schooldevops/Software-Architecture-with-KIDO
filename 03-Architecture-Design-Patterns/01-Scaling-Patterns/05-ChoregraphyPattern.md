@@ -65,3 +65,9 @@ image from: https://learn.microsoft.com/en-us/azure/architecture/patterns/choreo
 ![choregraphy03](imgs/choreography03.webp)
 
 image from: https://levelup.gitconnected.com/microservices-choreography-best-practices-and-tools-8e46f12bf8f1
+
+## 참고
+
+- https://dev.to/abarran03/microservices-patterns-orchestration-and-choreography-j06
+- https://learn.microsoft.com/en-us/azure/architecture/patterns/choreography
+- https://levelup.gitconnected.com/microservices-choreography-best-practices-and-tools-8e46f12bf8f1
