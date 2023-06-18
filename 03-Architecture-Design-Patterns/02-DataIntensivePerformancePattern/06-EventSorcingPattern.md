@@ -18,6 +18,10 @@
 - 이벤트 스토어의 내용을 순서대로 읽어 구체화된 뷰를 생성하여 읽기 시스템에서 조회할 수 있도록 구성한다. 
 - 이벤트 스토어의 내용은 체크 포인트 지점부터 리플레이를 수행할 수 있으며, 이를 통해 데이터의 감사와 같은 작업을 수행할 수 있다. 
 
+![event-sourcing02](imgs/eventsourcing.webp)
+
+image from: https://medium.com/design-microservices-architecture-with-patterns/event-sourcing-pattern-in-microservices-architectures-e72bf0fc9274
+
 ## 사용예
 
 - 금융시스템 
@@ -54,3 +58,4 @@
 
 - 참고:
   - https://learn.microsoft.com/ko-kr/azure/architecture/patterns/event-sourcing
+  - https://medium.com/design-microservices-architecture-with-patterns/event-sourcing-pattern-in-microservices-architectures-e72bf0fc9274

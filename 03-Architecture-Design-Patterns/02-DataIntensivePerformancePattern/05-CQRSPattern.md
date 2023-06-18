@@ -40,6 +40,10 @@ image from: https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
   - 읽기 저장소의 수평 클러스터링 (멀티 복제) 를 통한 읽기 성능 향상 
 - 쓰기 이벤트가 발생하면, 변경 사항에 대한 동기화를 읽기 저장소로 수행하여 동기화를 수행한다. 
 - 이벤트 소싱 등을 통해 쓰기에 수행된 데이터를 읽기로 동기화 하는 방법도 있음 
+
+![cqrs](imgs/cqrs.webp)
+
+image form : https://medium.com/design-microservices-architecture-with-patterns/event-sourcing-pattern-in-microservices-architectures-e72bf0fc9274
 ## 베스트 프랙티스 
 
 - Command 모델과 Query 모델을 명확하게 분리
@@ -69,3 +73,4 @@ image from: https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
 
 - 참고:
   - https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
+  - https://medium.com/design-microservices-architecture-with-patterns/event-sourcing-pattern-in-microservices-architectures-e72bf0fc9274
