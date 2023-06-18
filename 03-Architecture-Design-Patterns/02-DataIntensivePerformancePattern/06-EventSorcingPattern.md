@@ -59,3 +59,4 @@ image from: https://medium.com/design-microservices-architecture-with-patterns/e
 - 참고:
   - https://learn.microsoft.com/ko-kr/azure/architecture/patterns/event-sourcing
   - https://medium.com/design-microservices-architecture-with-patterns/event-sourcing-pattern-in-microservices-architectures-e72bf0fc9274
+  - https://martinfowler.com/eaaDev/EventSourcing.html
