@@ -56,5 +56,24 @@ from: https://javatechonline.com/how-to-implement-hystrix-circuit-breaker-in-mic
   - https://netflixtechblog.com/introducing-hystrix-for-resilience-engineering-13531c1ab362
 - Resilience4j
   - https://resilience4j.readme.io/
+  
+```java
+Supplier<String> supplier = () -> service.sayHelloWorld(param1);
 
+String result = Decorators.ofSupplier(supplier)
+  .withBulkhead(Bulkhead.ofDefaults("name"))
+  .withCircuitBreaker(CircuitBreaker.ofDefaults("name"))
+  .withRetry(Retry.ofDefaults("name"))
+  .withFallback(asList(CallNotPermittedException.class, BulkheadFullException.class),  
+      throwable -> "Hello from fallback")
+  .get()
+```
 
+- Relillience4j 는 Decorator Pattern을 사용하여 기존 소스에 데코레이터 형식으로 CircuitBreaker를 적용할 수 있다. 
+
+## WrapUp
+
+- CircuitBreaker는 서버의 장애 상황에 따라 요청을 컨트롤 하는 솔루션이다. 
+- 장애가 발생하면 Circuit이 Open이 된다. 
+- Open 된 상태에서 복구되면 Circuit Close가 된다. 
+- 다양한 Circuit Breaker Solution이 있으며, 스타일 및 적용방법에 따라 선택하면 된다. 
