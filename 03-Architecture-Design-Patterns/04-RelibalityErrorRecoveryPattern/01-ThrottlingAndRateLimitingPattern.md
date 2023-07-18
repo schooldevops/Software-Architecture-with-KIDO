@@ -28,6 +28,25 @@
 - 보안 및 올바른 요청만 지원
   - 요청의 유효성을 검사하고, 잘못된 요청이나 악성 요청을 거부
 
+## Throttling 패턴의 기본 형태 
+
+![throttling-basic](imgs/throttling-multi-tenant.png)
+
+from: https://learn.microsoft.com/en-us/azure/architecture/patterns/throttling
+
+- 위와 같이 요청에 대한 metering을 수행하여 클라이언트 요청을 제어
+- 각 클라이언트는 계약에 따라 throttling 값을 할당 받으며, 해당 제한값을 넘지 못한다. 
+
+## Throttling in API Gateway
+
+![throttling](imgs/api-throttling-diagram.svg)
+
+from: https://www.tibco.com/reference-center/what-is-api-throttling
+
+- 위와 같이 API는 Rate limit을 두어 요청 제한을 설정한다. 
+- 클라이언트는 자신에게 할당된 rate limit 이내에서만 요청을 수행할 수 있다. 이 limit이 오버되면, 최소 서비스 레벨에 맞는 요청을 받거나, 요청을 거부하게 된다. 
+
+
 ## 참고
 
 - Back Pressure
