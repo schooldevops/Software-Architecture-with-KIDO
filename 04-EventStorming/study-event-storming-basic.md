@@ -144,6 +144,17 @@
 
 <br/>
 
+## 기타
+
+### Boris Diagram
+
+[https://tanzu.vmware.com/developer/practices/boris/](https://tanzu.vmware.com/developer/practices/boris/)
+
+### SnapE Diagram
+
+![SnapE](https://velog.velcdn.com/images%2Finjoon2019%2Fpost%2Fe7bb7b99-6bf8-42a7-8abf-67d3225a4a81%2Fimage.png)
+
+[참고](https://velog.io/@injoon2019/CS-Domain-Driven-Design)
 
 ## 참고:
 
